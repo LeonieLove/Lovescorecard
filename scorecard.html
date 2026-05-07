@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 6 Characteristics Scorecard — Find Your Man in Bali</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F9F7F4; color: #1a1a1a; padding: 20px; max-width: 600px; margin: 0 auto; }
+.header { text-align: center; padding: 2rem 0 1.5rem; }
+.eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #0F6E56; margin-bottom: 6px; }
+.title { font-size: 24px; font-weight: 600; color: #1a1a1a; margin-bottom: 8px; }
+.sub { font-size: 14px; color: #666; line-height: 1.6; }
+.sc-row { background: white; border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.sc-row-header { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+.sc-num { width: 28px; height: 28px; border-radius: 50%; background: #E1F5EE; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #0F6E56; flex-shrink: 0; }
+.sc-name { font-size: 15px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
+.sc-desc { font-size: 12px; color: #888; line-height: 1.5; }
+.sub-q { padding: 10px 0; border-top: 1px solid #f0f0f0; }
+.sub-q-text { font-size: 13px; color: #444; margin-bottom: 8px; line-height: 1.4; }
+.sub-q-bottom { display: flex; align-items: center; gap: 10px; }
+input[type=range] { flex: 1; accent-color: #1D9E75; height: 4px; }
+.sub-val { font-size: 16px; font-weight: 600; color: #0F6E56; min-width: 20px; text-align: right; }
+.sc-avg { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 0; border-top: 1px solid #E1F5EE; margin-top: 4px; }
+.sc-avg-label { font-size: 12px; color: #888; }
+.sc-avg-val { font-size: 18px; font-weight: 600; color: #0F6E56; }
+.result { border-radius: 14px; padding: 20px; margin-top: 20px; margin-bottom: 40px; }
+.result.low { background: #FAECE7; border: 1px solid #F0997B; }
+.result.mid { background: #FAEEDA; border: 1px solid #FAC775; }
+.result.high { background: #E1F5EE; border: 1px solid #5DCAA5; }
+.result-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.result-label { font-size: 13px; color: #666; }
+.result-num { font-size: 36px; font-weight: 700; color: #0F6E56; }
+.result-max { font-size: 14px; color: #888; font-weight: 400; }
+.progress { height: 8px; background: rgba(0,0,0,0.08); border-radius: 99px; margin-bottom: 14px; overflow: hidden; }
+.progress-bar { height: 100%; border-radius: 99px; background: #1D9E75; transition: width 0.3s; }
+.range-label { font-size: 16px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
+.range-desc { font-size: 13px; color: #555; line-height: 1.6; }
+.leonie { text-align: center; padding: 20px; font-size: 13px; color: #888; }
+.leonie strong { color: #0F6E56; }
+</style>
+</head>
+<body>
+<div class="header">
+  <p class="eyebrow">Find Your Man in Bali</p>
+  <h1 class="title">The 6 Characteristics Scorecard</h1>
+  <p class="sub">Score yourself honestly — 1 to 10 per statement.<br>Not who you want to be. Who you are right now.</p>
+</div>
+
+<div id="rows"></div>
+
+<div class="result" id="result">
+  <div class="result-top">
+    <span class="result-label">Your total score</span>
+    <span><span class="result-num" id="total">30</span><span class="result-max"> / 60</span></span>
+  </div>
+  <div class="progress"><div class="progress-bar" id="bar" style="width:50%"></div></div>
+  <p class="range-label" id="range-label"></p>
+  <p class="range-desc" id="range-desc"></p>
+</div>
+
+<div class="leonie">Made with love by <strong>Leonie — The Love Lab</strong></div>
+
+<script>
+const chars = [
+  { name: "Emotional availability", desc: "You are open to love, not still processing an ex.", subs: ["I am not still emotionally attached to someone from my past", "I am genuinely open to committing to the right person right now", "I don't self-sabotage when something good comes along", "I don't look for validation from men to feel good about myself"] },
+  { name: "Self-reflection", desc: "You take responsibility for your own patterns.", subs: ["I can admit when I am wrong without feeling attacked", "I understand why my past relationships didn't work", "I don't blame men or bad luck for my love life", "I am willing to look at my own patterns honestly"] },
+  { name: "Maturity", desc: "You have your life together and take responsibility.", subs: ["I am financially independent and stable", "I am genuinely happy with my life even without a partner", "I don't need a relationship to feel complete", "I take responsibility for my own happiness"] },
+  { name: "Self-love and self-worth", desc: "You know your value and protect it.", subs: ["I don't change who I am to please a man", "I say no without feeling guilty", "I walk away when something doesn't feel right", "I don't lose myself at the beginning of a relationship", "I have clear boundaries and I actually keep them"] },
+  { name: "Emotional openness", desc: "You can be vulnerable without losing yourself.", subs: ["I can talk about my feelings without shutting down", "I let men in instead of keeping them at a distance", "I don't use my independence as a wall", "I ask for what I need in a relationship"] },
+  { name: "Positive mindset and integrity", desc: "You show up with a good attitude and mean what you say.", subs: ["I genuinely believe the right man exists for me", "I don't have a negative story about men in general", "My actions match my words in relationships", "I approach dating with curiosity instead of judgment"] }
+];
+
+const ranges = [
+  { label: "Still becoming her", desc: "There is real foundational work to do — and that is okay. This is exactly where to start. The most important relationship you will ever have is the one with yourself.", cls: "low" },
+  { label: "You're getting there", desc: "You are growing — but there are still blind spots keeping you stuck. The good news: you are closer than you think.", cls: "mid" },
+  { label: "You've done the work — but something else is blocking you", desc: "You are ready. You have done the inner work. But you're still not finding him. That means the problem is not you — it's where you're looking, how you show up, and which men you let in. That is exactly what we fix.", cls: "high" }
+];
+
+const allVals = chars.map(c => new Array(c.subs.length).fill(5));
+const container = document.getElementById('rows');
+
+chars.forEach((c, ci) => {
+  const row = document.createElement('div');
+  row.className = 'sc-row';
+  let subsHtml = c.subs.map((s, si) => `
+    <div class="sub-q">
+      <p class="sub-q-text">${s}</p>
+      <div class="sub-q-bottom">
+        <input type="range" min="1" max="10" step="1" value="5" data-ci="${ci}" data-si="${si}">
+        <span class="sub-val" id="v-${ci}-${si}">5</span>
+      </div>
+    </div>
+  `).join('');
+  row.innerHTML = `
+    <div class="sc-row-header">
+      <div class="sc-num">${ci+1}</div>
+      <div><p class="sc-name">${c.name}</p><p class="sc-desc">${c.desc}</p></div>
+    </div>
+    ${subsHtml}
+    <div class="sc-avg"><span class="sc-avg-label">Score for this characteristic</span><span class="sc-avg-val" id="avg-${ci}">5.0</span></div>
+  `;
+  container.appendChild(row);
+});
+
+function update() {
+  let grand = 0;
+  chars.forEach((c, ci) => {
+    const avg = allVals[ci].reduce((a,b)=>a+b,0)/allVals[ci].length;
+    document.getElementById('avg-'+ci).textContent = avg.toFixed(1);
+    grand += avg;
+  });
+  const total = Math.round(grand);
+  document.getElementById('total').textContent = total;
+  document.getElementById('bar').style.width = Math.round((total/60)*100)+'%';
+  const r = total <= 25 ? ranges[0] : total <= 45 ? ranges[1] : ranges[2];
+  document.getElementById('range-label').textContent = r.label;
+  document.getElementById('range-desc').textContent = r.desc;
+  document.getElementById('result').className = 'result ' + r.cls;
+}
+
+document.addEventListener('input', e => {
+  if (e.target.tagName !== 'INPUT') return;
+  const ci = parseInt(e.target.dataset.ci);
+  const si = parseInt(e.target.dataset.si);
+  allVals[ci][si] = parseInt(e.target.value);
+  document.getElementById('v-'+ci+'-'+si).textContent = e.target.value;
+  update();
+});
+
+update();
+</script>
+</body>
+</html>
